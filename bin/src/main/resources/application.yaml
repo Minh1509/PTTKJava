@@ -1,0 +1,21 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: SpringBootFinal
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/projectFinal
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+    hibernate:
+      ddl-auto: update
+
+
+

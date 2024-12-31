@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 50px;
+        }
+
+        .order-container {
+            background-color: #fff;
+            width: 80%;
+            margin: 30px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-details {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .order-details p {
+            margin: 8px 0;
+        }
+
+        .total-price {
+            font-weight: bold;
+            font-size: 1.3em;
+            color: #28a745;
+        }
+
+        .cta-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .cta-link:hover {
+            background-color: #0056b3;
+        }
+
+        .cta-link:active {
+            background-color: #004085;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="order-container">
+    <h1>Order Confirmation</h1>
+    <div class="order-details">
+        <p>Your order has been placed successfully!</p>
+        <p class="total-price">Total Price: <span th:text="${order.totalPrice}"></span></p>
+    </div>
+    <a href="/orders?userId=2" class="cta-link">View Your Orders</a>
+</div>
+
+</body>
+</html>
