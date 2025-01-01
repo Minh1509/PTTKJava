@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -16,6 +19,14 @@
       color: white;
       padding: 20px;
       text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .cart-icon i {
+      color: white;
+      font-size: 30px;
     }
 
     .container {
@@ -27,9 +38,11 @@
     }
 
     .products {
-      margin-top: 30px;
       width: 80%;
-      max-width: 600px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .products h2 {
@@ -37,14 +50,37 @@
       color: #333;
     }
 
+    .product-list {
+      display: flex;
+      gap: 20px;
+
+    }
+
+    .product-image img {
+      height: 200px;
+      width: 200px;
+    }
+
     .product-item {
       display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
       justify-content: space-between;
       padding: 10px;
       background-color: #fff;
       border: 1px solid #ddd;
       margin-bottom: 10px;
       border-radius: 5px;
+    }
+
+    .product-item .product-name {
+      font-size: 14px;
+    }
+
+    .product-item .product-price {
+      font-size: 16px;
+      color: green
     }
 
     .product-item button {
@@ -65,7 +101,6 @@
       color: white;
       text-align: center;
       padding: 10px;
-      position: absolute;
       width: 100%;
       bottom: 0;
     }
@@ -74,32 +109,58 @@
 <body>
 <header>
   <h1>Hi <span th:text="${user.userName}"></span>, Welcome to the Home Page</h1>
+  <div class="cart-icon">
+    <a th:href="@{/cart(userId=${user.id})}">
+      <i class="fas fa-shopping-cart"></i>
+    </a>
+  </div>
+
 </header>
 
 <div class="container">
   <div class="products">
-    <h2>Available Products</h2>
-    <div th:each="product : ${products}" class="product-item">
-      <span th:text="${product.name}">Product Name</span>
-      <span th:text="${product.price}">$0.00</span>
-      <!-- Form to add product to cart -->
-      <form th:action="@{/cart/add}" method="POST">
-        <input type="hidden" th:name="productId" th:value="${product.id}"/>
-        <input type="hidden" th:name="quantity" value="1"/>
-        <button type="submit">Buy Now</button>
-      </form>
+    <h2>All Products</h2>
+    <div class="product-list">
+      <div th:each="product : ${products}" class="product-item">
+        <div class="product-image">
+          <img th:src="${product.description}" alt="" srcset="">
+        </div>
+        <span th:text="${product.name}" class="product-name">Product Name</span>
+        <span th:text="${product.price}" class="product-price">$0.00</span>
+        <!-- Form to add product to cart -->
+        <form th:action="@{/cart/add}" method="POST" onsubmit="return false;">
+          <input type="hidden" th:name="productId" th:value="${product.id}" />
+          <input type="hidden" th:name="quantity" value="1" />
+          <button type="submit" onclick="showToastAndSubmitForm(event, this)">Buy Now</button>
+        </form>
+      </div>
     </div>
   </div>
-
-  <div class="home-buttons">
-    <a th:href="@{/cart(userId=${user.id})}">Go to Cart</a>
-  </div>
-
 </div>
 
 <footer>
   <p>&copy; 2024 Your Company. All rights reserved.</p>
 </footer>
+
+<script>
+  function showToastAndSubmitForm(event, button) {
+    event.preventDefault(); // Prevent default form submission
+
+    Toastify({
+      text: "Thêm vào giỏ hàng thành công ",
+      duration: 3000,
+      close: true,
+      gravity: "bottom",
+      position: "right",
+      backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+    }).showToast();
+
+    // Delay form submission for the toast to be shown
+    setTimeout(() => {
+      button.closest('form').submit(); // Submit the form programmatically
+    }, 1000); // Adjust the timeout if needed
+  }
+</script>
 
 </body>
 </html>

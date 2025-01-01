@@ -16,17 +16,29 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public String register(String userName, String password, HttpSession session) {
+    public boolean register(String userName, String password, HttpSession session) {
         User user = userRepository.findByUserName(userName);
-        if (user != null) return "User đã tồn tại";
+        if (user != null) return false;
 
         User newUser = new User();
         newUser.setUserName(userName);
         newUser.setPassword(password);
         session.setAttribute("user", newUser);
         userRepository.save(newUser);
-        return "Đăng ký thành công";
+        return true;
+    }
 
+    @Override
+    public boolean changePassword(Long userId, String currentPassword, String newPassword, String confirmNewPassword) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        if(currentPassword.equals(newPassword) || currentPassword.equals(confirmNewPassword)) return false;
+        if(!newPassword.equals(confirmNewPassword)) return false;
+
+        user.setPassword(currentPassword);
+        userRepository.save(user);
+        return true;
     }
 
     @Override

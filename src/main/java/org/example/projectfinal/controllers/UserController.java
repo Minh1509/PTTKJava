@@ -3,6 +3,7 @@ package org.example.projectfinal.controllers;
 
 import jakarta.servlet.http.HttpSession;
 import org.example.projectfinal.dto.UserDTO;
+import org.example.projectfinal.entity.User;
 import org.example.projectfinal.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,29 +21,41 @@ public class UserController {
         return "login";
     }
 
+    @GetMapping("/register")
+    public String register() {
+        return "register";
+    }
+
+    @GetMapping("/forgot")
+    public String forgot(@RequestParam String username){
+        return "forgot";
+    }
+
     @PostMapping("/login")
     public String login(@RequestParam String userName, @RequestParam String password, HttpSession session) {
         boolean isAuthenticated = userService.login(userName, password, session);
         if (isAuthenticated) {
             return "redirect:/";
         }
-        return "error";
-    }
-
-    @GetMapping("/register")
-    public String register() {
-        return "register";
+        return "login";
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody UserDTO userDTO, HttpSession session) {
-        String username = userDTO.getUserName();
-        String password = userDTO.getPassword();
-        String result = userService.register(username, password, session);
-        if (result.equals("Đăng ký thành công")) {
+    public String register(@RequestParam String username, @RequestParam String password, HttpSession session) {
+        boolean result = userService.register(username, password, session);
+        System.out.println(result);
+        if (result) {
             return "redirect:/";
         }
-        return "error";
+        return "register";
+    }
+
+    @PostMapping("/changePassword")
+    public String changePassword( RequestParam currentPassword, RequestParam newPassword, RequestParam confirmNewPassword) {
+
+
+        return "login";
+
     }
 
     @GetMapping("/logout")
