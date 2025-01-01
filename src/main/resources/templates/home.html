@@ -73,7 +73,7 @@
 </head>
 <body>
 <header>
-  <h1>Welcome to the Home Page</h1>
+  <h1>Hi <span th:text="${user.userName}"></span>, Welcome to the Home Page</h1>
 </header>
 
 <div class="container">
@@ -82,17 +82,24 @@
     <div th:each="product : ${products}" class="product-item">
       <span th:text="${product.name}">Product Name</span>
       <span th:text="${product.price}">$0.00</span>
-      <button>Buy Now</button>
+      <!-- Form to add product to cart -->
+      <form th:action="@{/cart/add}" method="POST">
+        <input type="hidden" th:name="productId" th:value="${product.id}"/>
+        <input type="hidden" th:name="quantity" value="1"/>
+        <button type="submit">Buy Now</button>
+      </form>
     </div>
   </div>
 
   <div class="home-buttons">
-    <a href="/cart?userId=2">Go to Cart</a>
+    <a th:href="@{/cart(userId=${user.id})}">Go to Cart</a>
   </div>
+
 </div>
 
 <footer>
   <p>&copy; 2024 Your Company. All rights reserved.</p>
 </footer>
+
 </body>
 </html>

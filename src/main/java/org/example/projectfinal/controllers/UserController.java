@@ -1,6 +1,7 @@
 package org.example.projectfinal.controllers;
 
 
+import jakarta.servlet.http.HttpSession;
 import org.example.projectfinal.dto.UserDTO;
 import org.example.projectfinal.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +17,16 @@ public class UserController {
 
     @GetMapping("/login")
     public String login() {
-        return "login"; // Trang login.html
+        return "login";
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String userName, @RequestParam String password) {
-        boolean isAuthenticated = userService.login(userName, password);
+    public String login(@RequestParam String userName, @RequestParam String password, HttpSession session) {
+        boolean isAuthenticated = userService.login(userName, password, session);
         if (isAuthenticated) {
             return "redirect:/";
         }
-        return "login";
+        return "error";
     }
 
     @GetMapping("/register")
@@ -34,14 +35,20 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody UserDTO userDTO) {
+    public String register(@RequestBody UserDTO userDTO, HttpSession session) {
         String username = userDTO.getUserName();
         String password = userDTO.getPassword();
-        String result = userService.register(username, password);
-        if (result.equals("Registration successful!")) {
+        String result = userService.register(username, password, session);
+        if (result.equals("Đăng ký thành công")) {
             return "redirect:/";
         }
-        return "register";
+        return "error";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
     }
 
 }
