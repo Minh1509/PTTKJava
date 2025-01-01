@@ -125,8 +125,10 @@
             <td th:text="${item.product.name}"></td>
             <td th:text="${item.product.price}"></td>
             <td>
-                <form action="/cart/update" method="post">
-                    <input type="number" name="quantity" th:value="${item.quantity}" min="1" required>
+                <form action="/cart/update" method="post" onsubmit="return calculateQuantity(this)">
+                    <input type="number" name="newQuantity" th:value="${item.quantity}" min="1" required>
+                    <input type="hidden" name="oldQuantity" th:value="${item.quantity}">
+                    <input type="hidden" name="quantity">
                     <input type="hidden" name="productId" th:value="${item.product.id}">
                     <button type="submit">Cập nhật</button>
                 </form>
@@ -139,6 +141,7 @@
                 </form>
             </td>
         </tr>
+
         </tbody>
     </table>
 
@@ -150,6 +153,18 @@
         <button type="submit" class="checkout-btn">Thanh toán</button>
     </form>
 </div>
+
+<script>
+    function calculateQuantity(form) {
+        const newQuantity = parseInt(form.newQuantity.value, 10);
+        const oldQuantity = parseInt(form.oldQuantity.value, 10);
+        const quantity = newQuantity - oldQuantity;
+
+        form.quantity.value = quantity;
+
+        return true;
+    }
+</script>
 
 </body>
 </html>

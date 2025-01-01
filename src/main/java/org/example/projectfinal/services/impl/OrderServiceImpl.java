@@ -1,4 +1,4 @@
-package org.example.projectfinal.services;
+package org.example.projectfinal.services.impl;
 
 import org.example.projectfinal.entity.*;
 import org.example.projectfinal.enums.OrderStatus;
@@ -23,7 +23,6 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderDate(new Date());
         order.setStatus(OrderStatus.PENDING);
         order.setTotalPrice(calculateTotalPrice(cart));
-
         return orderRepository.save(order);
     }
 

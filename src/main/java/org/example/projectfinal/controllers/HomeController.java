@@ -1,5 +1,6 @@
 package org.example.projectfinal.controllers;
 
+import jakarta.servlet.http.HttpSession;
 import org.example.projectfinal.entity.Product;
 import org.example.projectfinal.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,15 @@ public class HomeController {
     private ProductService productService;
 
     @GetMapping("/")
-    public String homePage(Model model) {
+    public String homePage(Model model, HttpSession session) {
+        Object user = session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
 
         List<Product> products = productService.getAllProducts();
         model.addAttribute("products", products);
-        return "home"; // Tên của trang home.html
+        model.addAttribute("user", user);
+        return "home";
     }
 }
